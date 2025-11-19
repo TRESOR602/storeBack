@@ -1,7 +1,7 @@
 const express=require('express');
 const mariadb=require('mariadb');
 const cors=require('cors');
-const port=4000;
+const port = process.env.PORT || 4000;
 require('dotenv').config();
 const transporter=require('./transpoter');
 const paths=require('./assets/transglobe/path');

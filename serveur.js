@@ -14,8 +14,7 @@ const cookieParser=require('cookie-parser')
 const app=express();
 
 app.use(cors({
-    // origin:process.env.ORIGIN_CORS,
-    origin:'*',
+    origin:process.env.ORIGIN_CORS,
     credentials:true
 }));
 
@@ -24,24 +23,17 @@ app.use(express.json());
 app.use(cookieParser());
 
 const pool=mariadb.createPool({
-    user: process.env.MYSQLUSER,
-    host: process.env.MYSQLHOST,
-    password: process.env.MYSQLPASSWORD,
-    database: process.env.MYSQLDATABASE,
-    port: process.env.MYSQLPORT,
-
-    // user:'learn',
-    // host:'localhost',
-    // password:process.env.PASSWORD_DB,
-    // database:'transglobe',
-
+    user:'learn',
+    host:'localhost',
+    password:process.env.PASSWORD_DB,
+    database:'transglobe',
     connectionLimit:5
 });
 
 // const PUBLIC_KEY=fs.readFileSync('./public.pem','utf8');
 // const PRIVATE_KEY=fs.readFileSync('./private.pem','utf8');
 const PUBLIC_KEY=process.env.PUBLIC_KEY;
-const PRIVATE_KEY=process.env.PRIVATE_KEY;
+const PRIVATE_KEY=process.env.PUBLIC_KEY;
 
 
 const verifyUser= async (req,res,next)=>{
@@ -272,8 +264,7 @@ app.post("/login",verifyUserExist,async (req,res)=>{
     }
 })
 
-app.set('trust proxy', true);
 
-app.listen(port,'0.0.0.0',()=>{
+app.listen(port,()=>{
     console.log('Server is running on port '+port);
 })

@@ -2,10 +2,11 @@
   "name": "transglobe-backend",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "serveur.js",
   "scripts": {
     "devStart": "nodemon serveur.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node serveur.js"
   },
   "keywords": [],
   "author": "",

@@ -30,8 +30,11 @@ const pool=mariadb.createPool({
     connectionLimit:5
 });
 
-const PUBLIC_KEY=fs.readFileSync('./public.pem','utf8');
-const PRIVATE_KEY=fs.readFileSync('./private.pem','utf8');
+// const PUBLIC_KEY=fs.readFileSync('./public.pem','utf8');
+// const PRIVATE_KEY=fs.readFileSync('./private.pem','utf8');
+const PUBLIC_KEY=process.env.PUBLIC_KEY;
+const PRIVATE_KEY=process.env.PRIVATE_KEY;
+
 
 const verifyUser= async (req,res,next)=>{
     const {email,password}=req.body;

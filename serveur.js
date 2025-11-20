@@ -14,7 +14,7 @@ const cookieParser=require('cookie-parser')
 const app=express();
 
 app.use(cors({
-    origin:process.env.ORIGIN_CORS,
+    origin:process.env.ORIGIN_CORS || '*',
     credentials:true
 }));
 
@@ -23,18 +23,48 @@ app.use(express.json());
 app.use(cookieParser());
 
 const pool=mariadb.createPool({
-    user:'learn',
-    host:'localhost',
-    password:process.env.PASSWORD_DB,
-    database:'transglobe',
-    connectionLimit:5
+    // user:'learn',
+    // host:'localhost',
+    // password:process.env.PASSWORD_DB,
+    // database:'transglobe',
+    // connectionLimit:5
+    host: process.env.DB_HOST,
+    port: parseInt(process.env.DB_PORT),
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+    connectionLimit: 5,
+    acquireTimeout: 30000,
+    connectTimeout: 30000,
+    // Configuration SSL pour Railway
+    ssl: {
+        rejectUnauthorized: false
+    },
+    // Options supplémentaires importantes
+    allowPublicKeyRetrieval: true,
+    multipleStatements: false
 });
+
+async () => {
+    try {
+        console.log('Test de connexion à la base de données...');
+        const conn = await pool.getConnection();
+        console.log('✅ Connexion réussie à la base de données!');
+        const result = await conn.query('SELECT DATABASE() as db, NOW() as time');
+        console.log('Base de données active:', result[0]);
+        conn.release();
+    } catch (err) {
+        console.error('❌ Erreur de connexion à la base de données:');
+        console.error('Code:', err.code);
+        console.error('Message:', err.message);
+        console.error('Détails:', err);
+    }
+}
 
 // const PUBLIC_KEY=fs.readFileSync('./public.pem','utf8');
 // const PRIVATE_KEY=fs.readFileSync('./private.pem','utf8');
 const PUBLIC_KEY=process.env.PUBLIC_KEY;
-const PRIVATE_KEY=process.env.PUBLIC_KEY;
-
+const PRIVATE_KEY=process.env.PRIVATE_KEY;
 
 const verifyUser= async (req,res,next)=>{
     const {email,password}=req.body;
@@ -265,6 +295,18 @@ app.post("/login",verifyUserExist,async (req,res)=>{
 })
 
 
-app.listen(port,()=>{
-    console.log('Server is running on port '+port);
+app.listen(port,async () => {
+    try {
+        console.log('Test de connexion à la base de données...');
+        const conn = await pool.getConnection();
+        console.log('✅ Connexion réussie à la base de données!');
+        const result = await conn.query('SELECT DATABASE() as db, NOW() as time');
+        console.log('Base de données active:', result[0]);
+        conn.release();
+    } catch (err) {
+        console.error('❌ Erreur de connexion à la base de données:');
+        console.error('Code:', err.code);
+        console.error('Message:', err.message);
+        console.error('Détails:', err);
+    }
 })

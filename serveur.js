@@ -295,7 +295,8 @@ app.post("/login",verifyUserExist,async (req,res)=>{
 })
 
 
-app.listen(port,async () => {
+app.listen(port,'0.0.0.0',async () => {
+     console.log(`✅ Serveur démarré sur le port ${port}`);
     try {
         console.log('Test de connexion à la base de données...');
         const conn = await pool.getConnection();

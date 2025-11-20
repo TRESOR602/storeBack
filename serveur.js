@@ -2,7 +2,10 @@ const express=require('express');
 const mariadb=require('mariadb');
 const cors=require('cors');
 const port = process.env.PORT || 4000;
-require('dotenv').config();
+// require('dotenv').config();
+if (process.env.NODE_ENV !== 'production') {
+    require('dotenv').config();
+}
 const transporter=require('./transpoter');
 const paths=require('./assets/transglobe/path');
 const bcrypt=require('bcrypt');

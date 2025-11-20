@@ -45,21 +45,18 @@ const pool=mariadb.createPool({
     multipleStatements: false
 });
 
-async () => {
+(async () => {
     try {
-        console.log('Test de connexion à la base de données...');
+        console.log('🔄 Test de connexion à la base de données...');
         const conn = await pool.getConnection();
         console.log('✅ Connexion réussie à la base de données!');
         const result = await conn.query('SELECT DATABASE() as db, NOW() as time');
-        console.log('Base de données active:', result[0]);
+        console.log('📊 Base de données active:', result[0]);
         conn.release();
     } catch (err) {
-        console.error('❌ Erreur de connexion à la base de données:');
-        console.error('Code:', err.code);
-        console.error('Message:', err.message);
-        console.error('Détails:', err);
+        console.error('❌ Erreur de connexion à la base de données:', err.message);
     }
-}
+})();
 
 // const PUBLIC_KEY=fs.readFileSync('./public.pem','utf8');
 // const PRIVATE_KEY=fs.readFileSync('./private.pem','utf8');
@@ -297,17 +294,4 @@ app.post("/login",verifyUserExist,async (req,res)=>{
 
 app.listen(port,'0.0.0.0',async () => {
      console.log(`✅ Serveur démarré sur le port ${port}`);
-    try {
-        console.log('Test de connexion à la base de données...');
-        const conn = await pool.getConnection();
-        console.log('✅ Connexion réussie à la base de données!');
-        const result = await conn.query('SELECT DATABASE() as db, NOW() as time');
-        console.log('Base de données active:', result[0]);
-        conn.release();
-    } catch (err) {
-        console.error('❌ Erreur de connexion à la base de données:');
-        console.error('Code:', err.code);
-        console.error('Message:', err.message);
-        console.error('Détails:', err);
-    }
 })
